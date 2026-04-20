@@ -24,8 +24,8 @@ from .entities import (
     TransactionTypePeriodicity,
 )
 from .filters import (
-    JournalEntryFilter,
-    JournalEntryIncludedFields,
+    LedgerEntryFilter,
+    LedgerEntryIncludedFields,
     MemoFilter,
     MemoIncludedFields,
     TransactionFilter,
