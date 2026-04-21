@@ -14,7 +14,7 @@ from .data_classes import (
     TransactionTypePeriodicity,
 )
 from .persistence import BasePersistence, Persisted, Persistence
-from .resources import (
+from .resource_classes import (
     Account,
     BaseResource,
     LedgerEntry,

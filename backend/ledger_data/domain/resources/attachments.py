@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Sequence  # noqa: F401
 from .persistence import Persisted
 
 if TYPE_CHECKING:
-    from .resources import (
+    from .resource_classes import (
         Account,
         BaseResource,
         LedgerEntry,

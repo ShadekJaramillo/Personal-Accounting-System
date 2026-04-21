@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 from utils import DateRange, DecimalRange
 
-from ..entities import (
+from ..resources import (
     AccountCodeStr,
     Currency,
     JournalEntryBalance,
