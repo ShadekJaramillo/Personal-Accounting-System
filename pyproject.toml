@@ -4,4 +4,27 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "docformatter>=1.7.7",
+    "fastapi[standard]>=0.135.2",
+    "sqlalchemy>=2.0.48",
+]
+
+
+[tool.ruff]
+line-length = 80
+target-version = "py313"
+# indent-width = 2
+
+[tool.ruff.lint]
+# Enable standard rules + Bugbear (B) and Isort (I)
+select = ["E", "F", "B", "I", "N"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-line-length = 72
+
+[tool.ruff.per-file-ignores]
+# If you want to stop linting/formatting certain files entirely
+"*.md" = ["ALL"]
