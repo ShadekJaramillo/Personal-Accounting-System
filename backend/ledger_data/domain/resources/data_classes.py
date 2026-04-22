@@ -228,8 +228,6 @@ class MemoData(BaseData):
         authorized_by (str):
             The name of the person who granted formal approval for the
             action described.
-        transaction_id (int | None):
-            Reference to an associated transaction record.
     """
 
     date: datetime
@@ -238,7 +236,6 @@ class MemoData(BaseData):
     subject: str
     message: str
     authorized_by: str
-    transaction_id: int | None
 
 
 # ============================================================================
