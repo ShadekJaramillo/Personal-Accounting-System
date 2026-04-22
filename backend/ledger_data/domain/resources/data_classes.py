@@ -217,9 +217,9 @@ class MemoData(BaseData):
     Attributes:
         date (datetime):
             The timestamp when the memo was issued.
-        to (str):
+        receiver (str):
             The intended recipient or department of the memo.
-        by (str):
+        emmiter (str):
             The individual who authored or issued the memo.
         subject (str):
             A brief heading summarizing the memo's content.
@@ -231,8 +231,8 @@ class MemoData(BaseData):
     """
 
     date: datetime
-    to: str
-    by: str
+    receiver: str
+    emmiter: str
     subject: str
     message: str
     authorized_by: str
