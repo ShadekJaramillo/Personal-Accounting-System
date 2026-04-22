@@ -1,4 +1,5 @@
 # TODO add and correct documentation for this module.
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Sequence  # noqa: F401

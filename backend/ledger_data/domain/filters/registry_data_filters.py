@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from utils import DateRange
+from .utils import DateRange
 
 
 class BasePersistenceDataFilter:

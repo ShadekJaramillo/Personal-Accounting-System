@@ -7,14 +7,13 @@ filtered.
 
 from dataclasses import dataclass
 
-from utils import DateRange, DecimalRange
-
 from ..resources import (
     AccountCodeStr,
     Currency,
     JournalEntryBalance,
     TransactionTypePeriodicity,
 )
+from .utils import DateRange, DecimalRange
 
 
 class BaseDataFilter:
