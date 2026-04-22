@@ -46,7 +46,7 @@ class TransactionIncludedFields(BaseIncludedFields):
     Attributes:
         include_transaction_type (InclusionType):
             Whether to load the associated TransactionType object.
-        include_journal_entries (InclusionType):
+        include_ledger_entries (InclusionType):
             Whether to load the list of associated JournalEntry objects.
         include_recipients (InclusionType):
             Whether to load the list of associated TransactionRecipient
@@ -56,7 +56,7 @@ class TransactionIncludedFields(BaseIncludedFields):
     """
 
     include_transaction_type: "InclusionType"
-    include_journal_entries: "InclusionType"
+    include_ledger_entries: "InclusionType"
     include_recipients: "InclusionType"
     include_memo: "InclusionType"
 

@@ -4,7 +4,7 @@ Domain Data Entities for the Accounting System.
 
 This module contains the foundational data structures used throughout
 the application's core. It defines the schema for financial
-transactions, journal entries, account hierarchies, and classification
+transactions, ledger entries, account hierarchies, and classification
 metadata.
 
 The entities are designed as immutable-first (via dataclasses) to ensure

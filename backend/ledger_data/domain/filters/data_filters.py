@@ -114,7 +114,7 @@ class LedgerEntryDataFilter(BaseDataFilter):
     """
     Filter for business data of JournalEntry entities.
 
-    Allows filtering journal entries by account ID, transaction ID, and
+    Allows filtering ledger entries by account ID, transaction ID, and
     amount range.
 
     Attributes:

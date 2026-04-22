@@ -24,7 +24,7 @@ class BaseAttachment:
     """Base class for attachment classes.
 
     An attachment is a data structure that is related to another one.
-    E.g. if a transaction data is requested, the journal entries can be
+    E.g. if a transaction data is requested, the ledger entries can be
     attachments in that request included through an ItemsAttachment
     object or a JournalEntryAttachment object.
     """
@@ -58,7 +58,7 @@ class TransactionAttachment[
 ](BaseAttachment):
     transaction_type: T_Type
     memo: T_Memo
-    journal_entries: Sequence[T_Entries]
+    ledger_entries: Sequence[T_Entries]
     recipients: Sequence[T_Recipients]
 
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Backend API serves as the gateway to the accounting system database. It provides a structured interface for managing financial data including transactions, accounts, journal entries, and related metadata.
+The Backend API serves as the gateway to the accounting system database. It provides a structured interface for managing financial data including transactions, accounts, ledger entries, and related metadata.
 
 ## Project guidelines
 

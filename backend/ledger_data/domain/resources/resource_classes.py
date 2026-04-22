@@ -88,7 +88,7 @@ class Transaction[P: Persistence, A: (TransactionAttachment, None)](
             Identity and audit metadata from the storage layer.
         attachments (TransactionAttachment, None):
             Object containing optional data on the transaction's type,
-            memo, journal entries and recipients
+            memo, ledger entries and recipients
     """
 
     pass
