@@ -1,5 +1,16 @@
 # ruff: noqa: F401
 
+from .attachments import (
+    AccountAttachment,
+    Attachment,
+    BaseAttachment,
+    HierarchyAttachment,
+    LedgerEntryAttachement,
+    MemoAttachment,
+    TransactionAttachment,
+    TransactionRecipientAttachment,
+    TransactionTypeAttachment,
+)
 from .data_classes import (
     AccountCodeStr,
     AccountData,
