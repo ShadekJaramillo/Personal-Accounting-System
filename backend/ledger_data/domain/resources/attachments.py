@@ -83,7 +83,6 @@ class TransactionRecipientAttachment(BaseAttachment):
     hierarchy: HierarchyAttachment[TransactionRecipient[Persisted, None]]
 
 
-# TODO add transaction attachments.
-# TODO after that, correct the documentation of the Memo in entities.py
+@dataclass
 class MemoAttachment(BaseAttachment):
-    pass
+    transactions: Sequence[Transaction]

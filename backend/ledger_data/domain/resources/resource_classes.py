@@ -200,7 +200,7 @@ class Memo[P: Persistence, A: (MemoAttachment, None)](
         persistence_data (P):
             Identity and registry metadata from the storage layer.
         attachments (A):
-            Optional Attachments. Memos don't include attachments yet
+            Optional Attachments.
 
     See the `LedgerEntry` and `LedgerEntryAttachement` classes
     documentation for more details on the data this class carries and
