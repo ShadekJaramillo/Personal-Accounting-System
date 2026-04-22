@@ -27,7 +27,7 @@ from .domain import (
 )
 
 
-class TransactionRepository(ABC):
+class BaseTransactionRepository(ABC):
     @abstractmethod
     async def create(
         self, data: Transaction[None, Any]
@@ -69,7 +69,7 @@ class TransactionRepository(ABC):
         pass
 
 
-class TransactionTypeRepository(ABC):
+class BaseTransactionTypeRepository(ABC):
     @abstractmethod
     async def create(
         self, data: TransactionTypeData
@@ -103,7 +103,7 @@ class TransactionTypeRepository(ABC):
         pass
 
 
-class LedgerEntryRepository(ABC):
+class BaseLedgerEntryRepository(ABC):
     @abstractmethod
     async def update(
         self, entry_id: int, data: LedgerEntryData
@@ -123,7 +123,7 @@ class LedgerEntryRepository(ABC):
         pass
 
 
-class TransactionRecipientRepository(ABC):
+class BaseTransactionRecipientRepository(ABC):
     @abstractmethod
     async def create(
         self, data: TransactionRecipientData
@@ -149,7 +149,7 @@ class TransactionRecipientRepository(ABC):
         pass
 
 
-class MemoRepository(ABC):
+class BaseMemoRepository(ABC):
     @abstractmethod
     async def create(self, data: Memo[None, Any]) -> Memo[Persisted, None]:
         """
