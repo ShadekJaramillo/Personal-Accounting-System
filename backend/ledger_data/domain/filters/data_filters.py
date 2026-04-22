@@ -161,7 +161,7 @@ class MemoDataFilter(BaseDataFilter):
     """
     Filter for business data of Memo entities.
 
-    Allows filtering by date, receivers, emmiters, subjects and
+    Allows filtering by date, receivers, emitters, subjects and
     authorizers.
 
     Attributes:
@@ -170,8 +170,8 @@ class MemoDataFilter(BaseDataFilter):
             Filter by a date range.
         receivers (set[str] | None):
             Filter by receivers
-        emmiters (set[str] | None):
-            Filter by emmiters.
+        emitters (set[str] | None):
+            Filter by emitters.
         subject (set[str] | None):
             Filter by subjects of the memos.
         authorizer (set[str] | None):
@@ -181,6 +181,6 @@ class MemoDataFilter(BaseDataFilter):
 
     date_range: DateRange | None
     receivers: set[str] | None
-    emmiters: set[str] | None
+    emitters: set[str] | None
     subject: set[str] | None
     authorizer: set[str] | None
