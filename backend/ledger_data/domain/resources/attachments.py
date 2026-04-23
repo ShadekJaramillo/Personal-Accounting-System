@@ -32,9 +32,6 @@ class BaseAttachment:
     pass
 
 
-type Attachment = BaseAttachment | None
-
-
 @dataclass
 class HierarchyAttachment[T: BaseResource[Any, Any, None]](BaseAttachment):
     """
@@ -86,3 +83,18 @@ class TransactionRecipientAttachment(BaseAttachment):
 @dataclass
 class MemoAttachment(BaseAttachment):
     transactions: Sequence[Transaction]
+
+
+type Attachment = BaseAttachment | None
+
+type TransactionAttachable = TransactionAttachment | None
+
+type TransactionTypeAttachable = TransactionTypeAttachment | None
+
+type AccountAttachable = AccountAttachment | None
+
+type LedgerEntryAttacheable = LedgerEntryAttachement | None
+
+type TransactionRecipientAttachable = TransactionRecipientAttachment | None
+
+type MemoAttachable = MemoAttachment | None

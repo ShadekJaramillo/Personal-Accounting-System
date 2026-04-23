@@ -20,13 +20,13 @@ Main Components:
 from dataclasses import dataclass
 
 from .attachments import (
-    AccountAttachment,
+    AccountAttachable,
     Attachment,
-    LedgerEntryAttachement,
-    MemoAttachment,
-    TransactionAttachment,
-    TransactionRecipientAttachment,
-    TransactionTypeAttachment,
+    LedgerEntryAttacheable,
+    MemoAttachable,
+    TransactionAttachable,
+    TransactionRecipientAttachable,
+    TransactionTypeAttachable,
 )
 from .data_classes import (
     AccountData,
@@ -71,7 +71,7 @@ class BaseResource[D: BaseData, P: Persistence, A: Attachment]:
     attachments: A
 
 
-class Transaction[P: Persistence, A: (TransactionAttachment, None)](
+class Transaction[P: Persistence, A: TransactionAttachable](
     BaseResource[TransactionData, P, A]
 ):
     """
@@ -94,7 +94,7 @@ class Transaction[P: Persistence, A: (TransactionAttachment, None)](
     pass
 
 
-class TransactionType[P: Persistence, A: (TransactionTypeAttachment, None)](
+class TransactionType[P: Persistence, A: TransactionTypeAttachable](
     BaseResource[TransactionTypeData, P, A]
 ):
     """
@@ -118,7 +118,7 @@ class TransactionType[P: Persistence, A: (TransactionTypeAttachment, None)](
     pass
 
 
-class Account[P: Persistence, A: (AccountAttachment, None)](
+class Account[P: Persistence, A: AccountAttachable](
     BaseResource[AccountData, P, A]
 ):
     """
@@ -142,7 +142,7 @@ class Account[P: Persistence, A: (AccountAttachment, None)](
     pass
 
 
-class LedgerEntry[P: Persistence, A: (LedgerEntryAttachement, None)](
+class LedgerEntry[P: Persistence, A: LedgerEntryAttacheable](
     BaseResource[LedgerEntryData, P, A]
 ):
     """
@@ -168,7 +168,7 @@ class LedgerEntry[P: Persistence, A: (LedgerEntryAttachement, None)](
 
 class TransactionRecipient[
     P: Persistence,
-    A: (TransactionRecipientAttachment, None),
+    A: TransactionRecipientAttachable,
 ](BaseResource[TransactionRecipientData, P, A]):
     """
     A full domain representation of a transaction recipient entity.
@@ -187,9 +187,7 @@ class TransactionRecipient[
     pass
 
 
-class Memo[P: Persistence, A: (MemoAttachment, None)](
-    BaseResource[MemoData, P, A]
-):
+class Memo[P: Persistence, A: MemoAttachable](BaseResource[MemoData, P, A]):
     """
     A full domain representation of a memorandum.
 
