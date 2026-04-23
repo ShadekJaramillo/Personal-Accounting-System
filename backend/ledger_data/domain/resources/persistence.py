@@ -14,9 +14,6 @@ class BasePersistence:
     pass
 
 
-type Persistence = BasePersistence | None
-
-
 # NOTE This class or a subclass of it should include audit metadata too
 # This change wwould be big but might be good to do at some point.
 @dataclass
@@ -39,3 +36,6 @@ class Persisted(BasePersistence):
     created_at: datetime
     last_updated_at: datetime
     deactivated_at: datetime | None
+
+
+type Persistence = Persisted | None
