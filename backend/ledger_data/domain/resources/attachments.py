@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Sequence  # noqa: F401
+from typing import TYPE_CHECKING, Any, Sequence
 
 from .persistence import Persisted
 
@@ -50,13 +50,17 @@ class HierarchyAttachment[T: BaseResource[Any, Any, None]](BaseAttachment):
 class TransactionAttachment[
     T_Type: (TransactionType, None),
     T_Memo: (Memo, None),
-    T_Entries: (LedgerEntry, int, None),
-    T_Recipients: (TransactionRecipient, int, None),
+    T_Entries: (Sequence[LedgerEntry[Persisted, None]], Sequence[int], None),
+    T_Recipients: (
+        Sequence[TransactionRecipient[Persisted, None]],
+        Sequence[int],
+        None,
+    ),
 ](BaseAttachment):
     transaction_type: T_Type
     memo: T_Memo
-    ledger_entries: Sequence[T_Entries]
-    recipients: Sequence[T_Recipients]
+    ledger_entries: T_Entries
+    recipients: T_Recipients
 
 
 @dataclass
