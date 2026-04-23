@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Sequence
+from decimal import Decimal
+from typing import TYPE_CHECKING, Any, Sequence, TypeGuard  # noqa: F401
 
+from .data_classes import JournalEntryBalance
 from .persistence import Persisted
 
 if TYPE_CHECKING:
@@ -61,6 +63,24 @@ class TransactionAttachment[
     memo: T_Memo
     ledger_entries: T_Entries
     recipients: T_Recipients
+
+    def __post__init__(self):
+        if self._is_entries_seq(self.ledger_entries):
+            debit = Decimal()
+            credit = Decimal()
+
+            for entry in self.ledger_entries:
+                if entry.data.entry_balance == JournalEntryBalance.CREDIT:
+                    credit += entry.data.amount
+                elif entry.data.entry_balance == JournalEntryBalance.DEBIT:
+                    debit += entry.data.amount
+
+            if credit != debit:
+                raise ValueError("Transaction is not balanced.")
+
+    @staticmethod
+    def _is_entries_seq(val: Any) -> TypeGuard[Sequence[LedgerEntry]]:
+        return isinstance(val, Sequence) and isinstance(val[0], LedgerEntry)
 
 
 @dataclass
