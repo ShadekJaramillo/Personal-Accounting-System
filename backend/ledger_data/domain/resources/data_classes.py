@@ -200,6 +200,7 @@ class TransactionRecipientData(BaseData):
 # NOTE This class is not suitable for formal accounting systems yet
 # since authorization and identification of the parts involved in the
 # memo is not actually enforced yet in the API.
+@dataclass
 class MemoData(BaseData):
     """
     Represents formal internal documentation or authorization notes for
