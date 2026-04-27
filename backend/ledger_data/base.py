@@ -103,6 +103,40 @@ class BaseTransactionTypeRepository(ABC):
         pass
 
 
+class BaseAccountRepository(ABC):
+    @abstractmethod
+    async def create(
+        self, data: TransactionRecipientData
+    ) -> TransactionRecipient[Persisted, None]:
+        pass
+
+    @abstractmethod
+    async def update(
+        self, type_id: int, data: TransactionTypeData
+    ) -> TransactionType[Persisted, None]:
+        pass
+
+    @abstractmethod
+    async def query(
+        self,
+        filter_: TransactionTypeFilter,
+        included_fields: TransactionTypeIncludedFields | None = None,
+    ) -> list[TransactionType[Persisted, Any]]:
+        pass
+
+    @abstractmethod
+    async def get_by_id(
+        self,
+        type_id: int,
+        included_fields: TransactionTypeIncludedFields | None = None,
+    ) -> TransactionType[Persisted, Any] | None:
+        pass
+
+    @abstractmethod
+    async def delete(self, type_id: int) -> None:
+        pass
+
+
 class BaseLedgerEntryRepository(ABC):
     @abstractmethod
     async def update(
