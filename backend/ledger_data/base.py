@@ -1,26 +1,34 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Sequence
 
 from .domain import (
+    Account,
+    AccountAttachment,
+    AccountData,
+    AccountFilter,
     LedgerEntry,
-    LedgerEntryData,
+    LedgerEntryAttacheable,
     LedgerEntryFilter,
     LedgerEntryIncludedFields,
     Memo,
+    MemoAttachable,
+    MemoAttachment,
     MemoData,
     MemoFilter,
     MemoIncludedFields,
     Persisted,
     Transaction,
+    TransactionAttachable,
     TransactionAttachment,
-    TransactionData,
     TransactionFilter,
     TransactionIncludedFields,
     TransactionRecipient,
+    TransactionRecipientAttachable,
     TransactionRecipientData,
     TransactionRecipientFilter,
     TransactionRecipientIncludedFields,
     TransactionType,
+    TransactionTypeAttachable,
     TransactionTypeData,
     TransactionTypeFilter,
     TransactionTypeIncludedFields,
@@ -30,10 +38,18 @@ from .domain import (
 class BaseTransactionRepository(ABC):
     @abstractmethod
     async def create(
-        self, data: Transaction[None, Any]
+        self,
+        transaction: Transaction[
+            None,
+            TransactionAttachment[
+                None, None, Sequence[LedgerEntry[None, None]], None
+            ],
+        ],
     ) -> Transaction[
         Persisted,
-        TransactionAttachment[None, None, LedgerEntry, None],
+        TransactionAttachment[
+            None, None, Sequence[LedgerEntry[Persisted, None]], None
+        ],
     ]:
         """
         Transactions can Include a sequence of ledger entries as
@@ -44,16 +60,24 @@ class BaseTransactionRepository(ABC):
 
     @abstractmethod
     async def update(
-        self, transaction_id: int, data: TransactionData
-    ) -> Transaction[Persisted, Any]:
+        self,
+        transaction_id: int,
+        data: Transaction[
+            Persisted,
+            TransactionAttachment[None, None, Sequence[LedgerEntry], None],
+        ],
+    ) -> Transaction[
+        Persisted,
+        TransactionAttachment[
+            None, None, Sequence[LedgerEntry[Persisted, None]], None
+        ],
+    ]:
         pass
 
     @abstractmethod
     async def query(
-        self,
-        filter_: TransactionFilter,
-        included_fields: TransactionIncludedFields | None = None,
-    ) -> list[Transaction[Persisted, Any]]:
+        self, filter_: TransactionFilter
+    ) -> Sequence[Transaction[Persisted, TransactionAttachable]]:
         pass
 
     @abstractmethod
@@ -61,7 +85,7 @@ class BaseTransactionRepository(ABC):
         self,
         transaction_id: int,
         included_fields: TransactionIncludedFields | None = None,
-    ) -> Transaction[Persisted, Any] | None:
+    ) -> Transaction[Persisted, TransactionAttachable]:
         pass
 
     @abstractmethod
@@ -86,8 +110,7 @@ class BaseTransactionTypeRepository(ABC):
     async def query(
         self,
         filter_: TransactionTypeFilter,
-        included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> list[TransactionType[Persisted, Any]]:
+    ) -> list[TransactionType[Persisted, TransactionTypeAttachable]]:
         pass
 
     @abstractmethod
@@ -95,7 +118,7 @@ class BaseTransactionTypeRepository(ABC):
         self,
         type_id: int,
         included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> TransactionType[Persisted, Any] | None:
+    ) -> TransactionType[Persisted, TransactionTypeAttachable]:
         pass
 
     @abstractmethod
@@ -105,31 +128,19 @@ class BaseTransactionTypeRepository(ABC):
 
 class BaseAccountRepository(ABC):
     @abstractmethod
-    async def create(
-        self, data: TransactionRecipientData
-    ) -> TransactionRecipient[Persisted, None]:
+    async def create(self, data: AccountData) -> Account[Persisted, None]:
         pass
 
     @abstractmethod
     async def update(
-        self, type_id: int, data: TransactionTypeData
-    ) -> TransactionType[Persisted, None]:
+        self, account_id: int, data: AccountData
+    ) -> Account[Persisted, None]:
         pass
 
     @abstractmethod
     async def query(
-        self,
-        filter_: TransactionTypeFilter,
-        included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> list[TransactionType[Persisted, Any]]:
-        pass
-
-    @abstractmethod
-    async def get_by_id(
-        self,
-        type_id: int,
-        included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> TransactionType[Persisted, Any] | None:
+        self, filter_: AccountFilter
+    ) -> list[Account[Persisted, AccountAttachment | None]]:
         pass
 
     @abstractmethod
@@ -139,21 +150,17 @@ class BaseAccountRepository(ABC):
 
 class BaseLedgerEntryRepository(ABC):
     @abstractmethod
-    async def update(
-        self, entry_id: int, data: LedgerEntryData
-    ) -> LedgerEntry[Persisted, Any]:
-        pass
-
-    @abstractmethod
     async def query(
-        self,
-        filter_: LedgerEntryFilter,
-        included_fields: LedgerEntryIncludedFields | None = None,
-    ) -> list[LedgerEntry[Persisted, Any]]:
+        self, filter_: LedgerEntryFilter
+    ) -> list[LedgerEntry[Persisted, LedgerEntryAttacheable]]:
         pass
 
     @abstractmethod
-    async def delete(self, entry_id: int) -> None:
+    async def get_by_id(
+        self,
+        entry_id: int,
+        included_fields: LedgerEntryIncludedFields | None = None,
+    ) -> LedgerEntry[Persisted, LedgerEntryAttacheable]:
         pass
 
 
@@ -174,8 +181,15 @@ class BaseTransactionRecipientRepository(ABC):
     async def query(
         self,
         filter_: TransactionRecipientFilter,
+    ) -> list[TransactionRecipient[Persisted, TransactionRecipientAttachable]]:
+        pass
+
+    @abstractmethod
+    async def get_by_id(
+        self,
+        recipient_id: int,
         included_fields: TransactionRecipientIncludedFields | None = None,
-    ) -> list[TransactionRecipient[Persisted, Any]]:
+    ) -> TransactionRecipient[Persisted, TransactionRecipientAttachable]:
         pass
 
     @abstractmethod
@@ -185,7 +199,7 @@ class BaseTransactionRecipientRepository(ABC):
 
 class BaseMemoRepository(ABC):
     @abstractmethod
-    async def create(self, data: Memo[None, Any]) -> Memo[Persisted, None]:
+    async def create(self, data: MemoData) -> Memo[Persisted, None]:
         """
         Memos can Include a sequence of transactions as attachments.
         This is done so this method can also create those transactions
@@ -203,8 +217,7 @@ class BaseMemoRepository(ABC):
     async def query(
         self,
         filter_: MemoFilter,
-        included_fields: MemoIncludedFields | None = None,
-    ) -> list[Memo[Persisted, Any]]:
+    ) -> list[Memo[Persisted, MemoAttachment | None]]:
         pass
 
     @abstractmethod
@@ -212,7 +225,7 @@ class BaseMemoRepository(ABC):
         self,
         memo_id: int,
         included_fields: MemoIncludedFields | None = None,
-    ) -> Memo[Persisted, Any] | None:
+    ) -> Memo[Persisted, MemoAttachable] | None:
         pass
 
     @abstractmethod
