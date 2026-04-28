@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-from .domain import (
+from ..domain import (
     Account,
     AccountAttachment,
     AccountData,

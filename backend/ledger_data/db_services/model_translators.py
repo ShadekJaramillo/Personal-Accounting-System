@@ -22,7 +22,7 @@ from ..domain.resources import (
     TransactionTypeData,
     TransactionTypePeriodicity,
 )
-from ..models.resource_models import (
+from .models.resource_models import (
     AccountModel,
     LedgerEntryModel,
     MemoModel,

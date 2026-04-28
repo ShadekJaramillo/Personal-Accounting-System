@@ -56,16 +56,6 @@ from ..domain.resources import (
     TransactionTypeAttachable,
     TransactionTypeAttachment,
 )
-from ..models.resource_models import (
-    AccountModel,
-    LedgerEntryModel,
-    MemoModel,
-    RegistryMetadataMixin,
-    TransactionModel,
-    TransactionRecipientModel,
-    TransactionTypeModel,
-    utcnow,
-)
 from .model_translators import (
     account_to_domain,
     account_to_domain_data,
@@ -80,6 +70,16 @@ from .model_translators import (
     transaction_to_domain_data,
     transaction_type_to_domain,
     transaction_type_to_domain_data,
+)
+from .models.resource_models import (
+    AccountModel,
+    LedgerEntryModel,
+    MemoModel,
+    RegistryMetadataMixin,
+    TransactionModel,
+    TransactionRecipientModel,
+    TransactionTypeModel,
+    utcnow,
 )
 
 

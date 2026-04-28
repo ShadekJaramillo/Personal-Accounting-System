@@ -6,7 +6,7 @@ from sqlalchemy import (
     TypeDecorator,
 )
 
-from ..domain import AccountCodeStr
+from ...domain import AccountCodeStr
 
 
 def utcnow():
