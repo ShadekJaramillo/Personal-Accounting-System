@@ -35,7 +35,11 @@ class BaseAttachment:
 
 
 @dataclass
-class HierarchyAttachment[T: BaseResource[Any, Any, None]](BaseAttachment):
+class HierarchyAttachment[
+    T_Parent: BaseResource[Any, Any, None] | None,
+    T_Parents: Sequence[BaseResource[Any, Any, None]] | None,
+    T_Children: Sequence[BaseResource[Any, Any, None]] | None,
+](BaseAttachment):
     """
     This attachment class includes data about the hierarchy of an object
     as in adjacency list structures.
@@ -43,20 +47,23 @@ class HierarchyAttachment[T: BaseResource[Any, Any, None]](BaseAttachment):
     'Operational costs'.
     """
 
-    parent: T | None
-    parents: Sequence[T]
-    children: Sequence[T]
+    parent: T_Parent
+    parents: T_Parents
+    children: T_Children
 
 
 @dataclass
 class TransactionAttachment[
-    T_Type: (TransactionType, None),
-    T_Memo: (Memo, None),
-    T_Entries: (Sequence[LedgerEntry[Persisted, None]], Sequence[int], None),
+    T_Type: TransactionType | None,
+    T_Memo: Memo | None,
+    T_Entries: (
+        Sequence[LedgerEntry[Persisted, None]]
+        | Sequence[LedgerEntry[None, None]]
+        | Sequence[int]
+        | None
+    ),
     T_Recipients: (
-        Sequence[TransactionRecipient[Persisted, None]],
-        Sequence[int],
-        None,
+        Sequence[TransactionRecipient[Persisted, None]] | Sequence[int] | None
     ),
 ](BaseAttachment):
     transaction_type: T_Type
@@ -85,28 +92,40 @@ class TransactionAttachment[
 
 @dataclass
 class TransactionTypeAttachment(BaseAttachment):
-    hierarchy: HierarchyAttachment[TransactionType[Persisted, None]]
+    hierarchy: HierarchyAttachment[
+        TransactionType[Persisted, None] | None,
+        Sequence[TransactionType[Persisted, None]] | None,
+        Sequence[TransactionType[Persisted, None]] | None,
+    ]
 
 
 @dataclass
 class AccountAttachment(BaseAttachment):
-    hierarchy: HierarchyAttachment[Account[Persisted, None]]
+    hierarchy: HierarchyAttachment[
+        Account[Persisted, None] | None,
+        Sequence[Account[Persisted, None]] | None,
+        Sequence[Account[Persisted, None]] | None,
+    ]
 
 
 @dataclass
 class LedgerEntryAttachement(BaseAttachment):
-    transaction: Transaction
-    account: Account
+    transaction: Transaction[Persisted, None] | int | None
+    account: Account[Persisted, None] | int | None
 
 
 @dataclass
 class TransactionRecipientAttachment(BaseAttachment):
-    hierarchy: HierarchyAttachment[TransactionRecipient[Persisted, None]]
+    hierarchy: HierarchyAttachment[
+        TransactionRecipient[Persisted, None] | None,
+        Sequence[TransactionRecipient[Persisted, None]] | None,
+        Sequence[TransactionRecipient[Persisted, None]] | None,
+    ]
 
 
 @dataclass
 class MemoAttachment(BaseAttachment):
-    transactions: Sequence[Transaction]
+    transactions: Sequence[Transaction[Persisted, None]] | Sequence[int]
 
 
 type Attachment = BaseAttachment | None
