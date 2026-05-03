@@ -66,12 +66,15 @@ class BaseTransactionRepository(ABC):
             Persisted,
             TransactionAttachment[None, None, Sequence[LedgerEntry], None],
         ],
-    ) -> Transaction[
-        Persisted,
-        TransactionAttachment[
-            None, None, Sequence[LedgerEntry[Persisted, None]], None
-        ],
-    ]:
+    ) -> (
+        Transaction[
+            Persisted,
+            TransactionAttachment[
+                None, None, Sequence[LedgerEntry[Persisted, None]], None
+            ],
+        ]
+        | None
+    ):
         pass
 
     @abstractmethod
@@ -85,7 +88,7 @@ class BaseTransactionRepository(ABC):
         self,
         transaction_id: int,
         included_fields: TransactionIncludedFields | None = None,
-    ) -> Transaction[Persisted, TransactionAttachable]:
+    ) -> Transaction[Persisted, TransactionAttachable] | None:
         pass
 
     @abstractmethod
@@ -103,7 +106,7 @@ class BaseTransactionTypeRepository(ABC):
     @abstractmethod
     async def update(
         self, type_id: int, data: TransactionTypeData
-    ) -> TransactionType[Persisted, None]:
+    ) -> TransactionType[Persisted, None] | None:
         pass
 
     @abstractmethod
@@ -118,7 +121,7 @@ class BaseTransactionTypeRepository(ABC):
         self,
         type_id: int,
         included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> TransactionType[Persisted, TransactionTypeAttachable]:
+    ) -> TransactionType[Persisted, TransactionTypeAttachable] | None:
         pass
 
     @abstractmethod
@@ -134,7 +137,7 @@ class BaseAccountRepository(ABC):
     @abstractmethod
     async def update(
         self, account_id: int, data: AccountData
-    ) -> Account[Persisted, None]:
+    ) -> Account[Persisted, None] | None:
         pass
 
     @abstractmethod
@@ -160,7 +163,7 @@ class BaseLedgerEntryRepository(ABC):
         self,
         entry_id: int,
         included_fields: LedgerEntryIncludedFields | None = None,
-    ) -> LedgerEntry[Persisted, LedgerEntryAttacheable]:
+    ) -> LedgerEntry[Persisted, LedgerEntryAttacheable] | None:
         pass
 
 
@@ -174,7 +177,7 @@ class BaseTransactionRecipientRepository(ABC):
     @abstractmethod
     async def update(
         self, recipient_id: int, data: TransactionRecipientData
-    ) -> TransactionRecipient[Persisted, None]:
+    ) -> TransactionRecipient[Persisted, None] | None:
         pass
 
     @abstractmethod
@@ -189,7 +192,7 @@ class BaseTransactionRecipientRepository(ABC):
         self,
         recipient_id: int,
         included_fields: TransactionRecipientIncludedFields | None = None,
-    ) -> TransactionRecipient[Persisted, TransactionRecipientAttachable]:
+    ) -> TransactionRecipient[Persisted, TransactionRecipientAttachable] | None:
         pass
 
     @abstractmethod
@@ -210,7 +213,7 @@ class BaseMemoRepository(ABC):
     @abstractmethod
     async def update(
         self, memo_id: int, data: MemoData
-    ) -> Memo[Persisted, None]:
+    ) -> Memo[Persisted, None] | None:
         pass
 
     @abstractmethod

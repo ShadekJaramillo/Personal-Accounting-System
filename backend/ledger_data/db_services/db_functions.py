@@ -110,7 +110,7 @@ def update_transaction(
 ):
     model = get_registry(session, transaction_id, TransactionModel)
     if not model:
-        raise ValueError(f"Transaction with ID {transaction_id} not found")
+        return None
 
     model.transaction_date = data.transaction_date
     model.description = data.description
@@ -404,9 +404,7 @@ def update_account(session: Session, account_id: int, data: AccountData):
     )
 
     if not model:
-        raise ValueError(
-            f"TransactionRecipient with ID {account_id} not found."
-        )
+        return None
 
     model.code = data.code
     model.currency = data.currency
@@ -650,9 +648,7 @@ def update_recipient(
     )
 
     if not model:
-        raise ValueError(
-            f"TransactionRecipient with ID {recipient_id} not found."
-        )
+        return None
 
     model.name = data.name
     model.description = data.description
@@ -812,7 +808,7 @@ def update_memo(session: Session, memo_id: int, data: MemoData):
     )
 
     if not model:
-        raise ValueError(f"TransactionRecipient with ID {memo_id} not found.")
+        return None
 
     model.date = data.date
     model.receiver = data.receiver

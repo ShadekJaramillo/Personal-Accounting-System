@@ -151,16 +151,21 @@ class SQLTransactionService(BaseTransactionRepository):
             Persisted,
             TransactionAttachment[None, None, Sequence[LedgerEntry], None],
         ],
-    ) -> Transaction[
-        Persisted,
-        TransactionAttachment[
-            None, None, Sequence[LedgerEntry[Persisted, None]], None
-        ],
-    ]:
+    ) -> (
+        Transaction[
+            Persisted,
+            TransactionAttachment[
+                None, None, Sequence[LedgerEntry[Persisted, None]], None
+            ],
+        ]
+        | None
+    ):
         with self.get_session.begin() as session:
             transaction_persistence = update_transaction(
                 session=session, transaction_id=transaction_id, data=data.data
             )
+            if not transaction_persistence:
+                return None
             transaction_ledger_entries = update_transaction_entries(
                 session, data.attachments.ledger_entries
             )
@@ -196,7 +201,7 @@ class SQLTransactionService(BaseTransactionRepository):
         self,
         transaction_id: int,
         included_fields: TransactionIncludedFields | None = None,
-    ) -> Transaction[Persisted, TransactionAttachable]:
+    ) -> Transaction[Persisted, TransactionAttachable] | None:
         if not included_fields:
             included_fields = TransactionIncludedFields(
                 InclusionType.NONE,
@@ -225,7 +230,7 @@ class SQLTransactionService(BaseTransactionRepository):
         with self.get_session() as session:
             res = get_transactions_from_filter(session, transaction_filter)
         if len(res) < 1:
-            raise ValueError("The requested id does not exist")
+            return None
         return res[0]
 
     # TODO desactivating a transaction should also desactivate its
@@ -270,14 +275,14 @@ class SQLTransactionTypeService(BaseTransactionTypeRepository):
 
     async def update(
         self, type_id: int, data: TransactionTypeData
-    ) -> TransactionType[Persisted, None]:
+    ) -> TransactionType[Persisted, None] | None:
         with self.get_session() as session:
             model: TransactionTypeModel | None = get_registry(
                 session, type_id, table_model=TransactionTypeModel
             )
 
             if not model:
-                raise ValueError(f"TransactionType with ID {type_id} not found")
+                return None
 
             model.name = data.name
             model.description = data.description
@@ -304,7 +309,7 @@ class SQLTransactionTypeService(BaseTransactionTypeRepository):
         self,
         type_id: int,
         included_fields: TransactionTypeIncludedFields | None = None,
-    ) -> TransactionType[Persisted, TransactionTypeAttachable]:
+    ) -> TransactionType[Persisted, TransactionTypeAttachable] | None:
         if not included_fields:
             included_fields = TransactionTypeIncludedFields(
                 HierarchyIncludedFields(
@@ -321,7 +326,7 @@ class SQLTransactionTypeService(BaseTransactionTypeRepository):
         with self.get_session() as session:
             result = get_transaction_types_by_filter(session, filter_)
             if len(result) < 1:
-                raise ValueError("The requested id does not exist")
+                return None
             return result[0]
 
     # TODO think about what deactivating a transaction type should do
@@ -362,9 +367,12 @@ class SQLAccountService(BaseAccountRepository):
 
     async def update(
         self, account_id: int, data: AccountData
-    ) -> Account[Persisted, None]:
+    ) -> Account[Persisted, None] | None:
         with self.get_session.begin() as session:
             persistence = update_account(session, account_id, data)
+
+        if not persistence:
+            return None
         return Account(
             data=data,
             persistence_data=persistence,
@@ -407,7 +415,7 @@ class SQLLedgerEntryService(BaseLedgerEntryRepository):
         self,
         entry_id: int,
         included_fields: LedgerEntryIncludedFields | None = None,
-    ) -> LedgerEntry[Persisted, LedgerEntryAttacheable]:
+    ) -> LedgerEntry[Persisted, LedgerEntryAttacheable] | None:
         if not included_fields:
             included_fields = LedgerEntryIncludedFields(
                 InclusionType.NONE,
@@ -423,7 +431,7 @@ class SQLLedgerEntryService(BaseLedgerEntryRepository):
         with self.get_session() as session:
             result = get_ledger_entries_from_filter(session, filter_)
             if len(result) < 1:
-                raise ValueError("The requested id does not exist")
+                return None
             return result[0]
 
 
@@ -447,9 +455,11 @@ class SQLTransactionRecipientService(BaseTransactionRecipientRepository):
 
     async def update(
         self, recipient_id: int, data: TransactionRecipientData
-    ) -> TransactionRecipient[Persisted, None]:
+    ) -> TransactionRecipient[Persisted, None] | None:
         with self.get_session() as session:
             persistence = update_recipient(session, recipient_id, data)
+        if not persistence:
+            return None
         return TransactionRecipient(
             data=data,
             persistence_data=persistence,
@@ -481,14 +491,14 @@ class SQLTransactionRecipientService(BaseTransactionRecipientRepository):
         self,
         recipient_id: int,
         included_fields: TransactionRecipientIncludedFields | None = None,
-    ) -> TransactionRecipient[Persisted, TransactionRecipientAttachable]:
+    ) -> TransactionRecipient[Persisted, TransactionRecipientAttachable] | None:
         with self.get_session() as session:
             model: TransactionRecipientModel | None = get_registry(
                 session, id=recipient_id, table_model=TransactionRecipientModel
             )
 
             if model is None:
-                raise ValueError(f"model with id {recipient_id} not found")
+                return None
 
             if not included_fields:
                 attached_data = None
@@ -561,9 +571,11 @@ class SQLMemoService(BaseMemoRepository):
 
     async def update(
         self, memo_id: int, data: MemoData
-    ) -> Memo[Persisted, None]:
+    ) -> Memo[Persisted, None] | None:
         with self.get_session.begin() as session:
             persistence = update_memo(session, memo_id, data)
+            if not persistence:
+                return None
 
             return Memo(
                 data=data, persistence_data=persistence, attachments=None
@@ -594,7 +606,7 @@ class SQLMemoService(BaseMemoRepository):
         with self.get_session() as session:
             result = get_memos_by_filter(session, filter_)
             if len(result) < 1:
-                raise ValueError("The requested id does not exist")
+                return None
             return result[0]
 
     # TODO define what happens with registries pointing to the deactivated
